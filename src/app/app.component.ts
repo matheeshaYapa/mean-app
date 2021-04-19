@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {PostModel} from './posts/models/post.model';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'mean-app';
+  posts = new Array<PostModel>();
+
+  onPostAdded(post: PostModel): void {
+    this.posts.push(post);
+  }
 }
