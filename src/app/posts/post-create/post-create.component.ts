@@ -1,5 +1,6 @@
-import {Component, OnInit, EventEmitter, Output} from '@angular/core';
-import {PostModel} from '../models/post.model';
+import {Component, OnInit} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {PostsService} from '../services/posts.service';
 
 @Component({
   selector: 'app-post-create',
@@ -8,23 +9,19 @@ import {PostModel} from '../models/post.model';
 })
 export class PostCreateComponent implements OnInit {
 
-  @Output() postCreated = new EventEmitter<PostModel>();
-
-  enteredTitle = '';
-  enteredContent = '';
-
-  constructor() { }
+  constructor(
+    private postsService: PostsService
+  ) { }
 
   ngOnInit(): void {
   }
 
-  onSavePost(): void {
-    const post: PostModel = {
-      title: this.enteredTitle,
-      content: this.enteredContent
-    };
-
-    this.postCreated.emit(post);
+  onSavePost(form: NgForm): void {
+    if (form.invalid) {
+      return;
+    }
+    this.postsService.addPost(form.value.title, form.value.content);
+    form.resetForm();
   }
 
 }
