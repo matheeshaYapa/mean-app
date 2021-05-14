@@ -1,7 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const PostModel = require('./models/post');
 
 const app = express();
+
+mongoose.connect(
+  'mongodb+srv://matheeshaYapa:M3AsDWj8kOVlloe6@cluster0.ubipj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+  {useNewUrlParser: true, useUnifiedTopology: true}
+)
+  .then(() => {
+    console.log('Connected to the database!');
+  })
+  .catch((error) => {
+    console.log(error);
+    console.log('Connection Failed!');
+  });
 
 app.use(bodyParser.json());
 
@@ -13,7 +28,10 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/posts', (req, res, next) => {
-  const post = req.body;
+  const post = new PostModel({
+    title: req.body.title,
+    content: req.body.content
+  });
   console.log(post);
   res.status(201).json({
     message: 'Post added successfully'
@@ -32,3 +50,5 @@ app.get('/api/posts', (req, res, next) => {
 });
 
 module.exports = app;
+
+// M3AsDWj8kOVlloe6
