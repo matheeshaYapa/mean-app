@@ -1,6 +1,6 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<ng-container *ngIf="!isLoading">
+<div [hidden]="isLoading">
   <mat-accordion multi *ngIf="posts.length > 0">
     <mat-expansion-panel *ngFor="let post of posts">
       <mat-expansion-panel-header>
@@ -20,5 +20,10 @@
     </mat-expansion-panel>
   </mat-accordion>
 
+  <mat-paginator *ngIf="posts.length"
+    (page)="onPageChange($event)" showFirstLastButtons [pageIndex]="currentPage - 1"
+    [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions">
+  </mat-paginator>
+
   <p class="info-text mat-body-2" *ngIf="!posts.length">No posts added yet!</p>
-</ng-container>
+</div>
