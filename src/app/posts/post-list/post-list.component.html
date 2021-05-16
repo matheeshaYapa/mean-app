@@ -7,6 +7,10 @@
         <p class="mat-body-2">{{post.title}}</p>
       </mat-expansion-panel-header>
 
+      <div class="post-image">
+        <img [src]="post.imagePath" [alt]="post.title">
+      </div>
+
       <p>{{post.content}}</p>
 
       <mat-action-row>
