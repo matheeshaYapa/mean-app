@@ -17,7 +17,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private http: HttpClient
-  ) { }
+  ) {
+  }
 
   getToken(): string {
     return this.token as string;
@@ -33,15 +34,18 @@ export class AuthService {
 
   createUser(email: string, password: string): void {
     const authData: AuthDataModel = {email, password};
-    this.http.post('http://localhost:3000/api/user/signup', authData)
-      .subscribe(response => {
+    this.http.post('http://localhost:3000/api/user/signup', authData).subscribe(
+      response => {
         this.router.navigate(['/login']);
-      });
+      }, error => {
+        this.authStatusListener.next(false);
+      }
+    );
   }
 
   loginUser(email: string, password: string): void {
     const authData: AuthDataModel = {email, password};
-    this.http.post<{token: string, expiresIn: number, userId: string}>('http://localhost:3000/api/user/login', authData)
+    this.http.post<{ token: string, expiresIn: number, userId: string }>('http://localhost:3000/api/user/login', authData)
       .subscribe(response => {
         this.token = response.token;
 
@@ -55,6 +59,8 @@ export class AuthService {
           this.saveAuthData(this.token, new Date(date.getTime() + response.expiresIn * 1000), response.userId);
           this.router.navigate(['/']);
         }
+      }, () => {
+        this.authStatusListener.next(false);
       });
   }
 
