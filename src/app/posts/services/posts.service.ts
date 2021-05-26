@@ -30,7 +30,8 @@ export class PostsService {
         return {posts: response.posts.map<PostModel>(post => {
           return {
             ...post,
-            id: post._id
+            id: post._id,
+            userId: post.creator
           };
         }),
           maxPosts: response.maxPosts
@@ -43,7 +44,7 @@ export class PostsService {
   }
 
   getPost(postId: string): Observable<PostModel> {
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(`http://localhost:3000/api/posts/${postId}`)
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string, userId: string }>(`http://localhost:3000/api/posts/${postId}`)
       .pipe(map(post => {
         return {
           ...post,
@@ -82,7 +83,7 @@ export class PostsService {
         title,
         content,
         imagePath: image
-      };
+      } as PostModel;
     }
     this.http.put(`http://localhost:3000/api/posts/${postId}`, postData)
       .subscribe(
