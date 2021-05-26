@@ -13,7 +13,7 @@
 
       <p>{{post.content}}</p>
 
-      <mat-action-row>
+      <mat-action-row *ngIf="isUserAuthenticated">
         <a [routerLink]="['/edit', post.id]" mat-button color="primary">EDIT</a>
         <button mat-button color="warn" (click)="onDeletePost(post.id)">DELETE</button>
       </mat-action-row>

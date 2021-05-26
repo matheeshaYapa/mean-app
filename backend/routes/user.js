@@ -50,14 +50,14 @@ router.post('/login', (req, res, next) => {
           message: 'Password Incorrect!'
         });
       }
-      console.log(result);
       const token = jwt.sign(
         {email: fetchedUser.email, userId: fetchedUser._id},
         'matheeshalaknathaabesiriwardanasenerathyapa',
         {expiresIn: '1h'}
       );
       res.status(200).json({
-        token: token
+        token: token,
+        expiresIn: 3600
       });
     })
     .catch(err => {
