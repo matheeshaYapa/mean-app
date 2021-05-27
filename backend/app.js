@@ -9,7 +9,7 @@ const userRoutes = require('./routes/user');
 const app = express();
 
 mongoose.connect(
-  'mongodb+srv://matheeshaYapa:M3AsDWj8kOVlloe6@cluster0.ubipj.mongodb.net/meanApp?w=majority',
+  `mongodb+srv://matheeshaYapa:${process.env.MONGO_ATLAS_PW}@cluster0.ubipj.mongodb.net/meanApp?w=majority`,
   {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}
 )
   .then(() => {

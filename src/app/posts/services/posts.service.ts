@@ -4,6 +4,9 @@ import {Observable, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
+
+const BACKEND_URL = environment.apiUrl + '/posts';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +27,7 @@ export class PostsService {
     const queryParams =  `?page=${currentPage}&size=${postsPerPage}`;
 
     this.http.get<{message: string, posts: Array<any>, maxPosts: number}>(
-      'http://localhost:3000/api/posts' + queryParams
+      BACKEND_URL + queryParams
     )
       .pipe(map(response => {
         return {posts: response.posts.map<PostModel>(post => {
@@ -44,7 +47,7 @@ export class PostsService {
   }
 
   getPost(postId: string): Observable<PostModel> {
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string, userId: string }>(`http://localhost:3000/api/posts/${postId}`)
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string, userId: string }>(`${BACKEND_URL}/${postId}`)
       .pipe(map(post => {
         return {
           ...post,
@@ -63,7 +66,7 @@ export class PostsService {
     postData.append('content', content);
     postData.append('image', image, title);
 
-    this.http.post<{message: string, post: PostModel}>('http://localhost:3000/api/posts', postData)
+    this.http.post<{message: string, post: PostModel}>(BACKEND_URL, postData)
       .subscribe((response) => {
         this.router.navigate(['/']);
       });
@@ -85,7 +88,7 @@ export class PostsService {
         imagePath: image
       } as PostModel;
     }
-    this.http.put(`http://localhost:3000/api/posts/${postId}`, postData)
+    this.http.put(`${BACKEND_URL}/${postId}`, postData)
       .subscribe(
         response => {
           this.router.navigate(['/']);
@@ -94,6 +97,6 @@ export class PostsService {
   }
 
   deletePost(postId: string): Observable<any> {
-    return this.http.delete(`http://localhost:3000/api/posts/${postId}`);
+    return this.http.delete(`${BACKEND_URL}/${postId}`);
   }
 }
